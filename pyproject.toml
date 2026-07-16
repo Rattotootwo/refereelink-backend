@@ -48,7 +48,7 @@ dev = [
 Homepage = "https://github.com/refereelink-team/refereelink-backend"
 
 [tool.setuptools.packages.find]
-include = ["app", "app.*"]
+include = ["app", "app.*", "experiments", "experiments.*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
