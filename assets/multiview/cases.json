@@ -1,0 +1,72 @@
+[
+  {
+    "case_id": "soccernet_action_183",
+    "title": "疑似犯规",
+    "match_name": "UEFA Champions League · 2017-03-08",
+    "match_clock": "62:14",
+    "description": "检测到疑似犯规事件，待人工复核确认。",
+    "event_time_s": 3.0,
+    "review_state": "pending",
+    "risk_level": "high",
+    "zone": "位置待确认",
+    "videos": [
+      {"camera_id": "view_1", "display_name": "主机位", "role": "main", "path": "datasets/SN-MVFouls-2024/test/action_183/clip_0.mp4"},
+      {"camera_id": "view_2", "display_name": "近景回放 1", "role": "replay", "path": "datasets/SN-MVFouls-2024/test/action_183/clip_1.mp4"},
+      {"camera_id": "view_3", "display_name": "近景回放 2", "role": "replay", "path": "datasets/SN-MVFouls-2024/test/action_183/clip_2.mp4"}
+    ],
+    "evidence_notes": ["官方真值：Tackling", "官方真值：Offence + Yellow card", "低清 · 3 个视角"]
+  },
+  {
+    "case_id": "soccernet_action_2",
+    "title": "疑似犯规",
+    "match_name": "English Premier League · 2015-08-23",
+    "match_clock": "37:05",
+    "description": "检测到疑似犯规事件，待人工复核确认。",
+    "event_time_s": 3.0,
+    "review_state": "pending",
+    "risk_level": "medium",
+    "zone": "位置待确认",
+    "videos": [
+      {"camera_id": "view_1", "display_name": "主机位", "role": "main", "path": "datasets/SN-MVFouls-2024/test/action_2/clip_0.mp4"},
+      {"camera_id": "view_2", "display_name": "近景回放 1", "role": "replay", "path": "datasets/SN-MVFouls-2024/test/action_2/clip_1.mp4"},
+      {"camera_id": "view_3", "display_name": "近景回放 2", "role": "replay", "path": "datasets/SN-MVFouls-2024/test/action_2/clip_2.mp4"},
+      {"camera_id": "view_4", "display_name": "近景回放 3", "role": "replay", "path": "datasets/SN-MVFouls-2024/test/action_2/clip_3.mp4"}
+    ],
+    "evidence_notes": ["官方真值：Standing tackling", "官方真值：Offence + No card", "低清 · 4 个视角"]
+  },
+  {
+    "case_id": "soccernet_action_78",
+    "title": "疑似犯规",
+    "match_name": "UEFA Champions League · 2014-11-04",
+    "match_clock": "18:47",
+    "description": "检测到疑似犯规事件，待人工复核确认。",
+    "event_time_s": 3.0,
+    "review_state": "pending",
+    "risk_level": "low",
+    "zone": "位置待确认",
+    "videos": [
+      {"camera_id": "view_1", "display_name": "主机位", "role": "main", "path": "datasets/SN-MVFouls-2024/test/action_78/clip_0.mp4"},
+      {"camera_id": "view_2", "display_name": "侧向主机位", "role": "side", "path": "datasets/SN-MVFouls-2024/test/action_78/clip_1.mp4"},
+      {"camera_id": "view_3", "display_name": "近景回放 1", "role": "replay", "path": "datasets/SN-MVFouls-2024/test/action_78/clip_2.mp4"},
+      {"camera_id": "view_4", "display_name": "近景回放 2", "role": "replay", "path": "datasets/SN-MVFouls-2024/test/action_78/clip_3.mp4"}
+    ],
+    "evidence_notes": ["官方真值：Tackling", "官方真值：No offence", "低清 · 4 个视角"]
+  },
+  {
+    "case_id": "soccernet_action_144",
+    "title": "疑似犯规",
+    "match_name": "UEFA Champions League · 2015-11-03",
+    "match_clock": "78:32",
+    "description": "检测到疑似犯规事件，待人工复核确认。",
+    "event_time_s": 3.0,
+    "review_state": "pending",
+    "risk_level": "high",
+    "zone": "位置待确认",
+    "videos": [
+      {"camera_id": "view_1", "display_name": "主机位", "role": "main", "path": "datasets/SN-MVFouls-2024/test/action_144/clip_0.mp4"},
+      {"camera_id": "view_2", "display_name": "球门后回放", "role": "replay", "path": "datasets/SN-MVFouls-2024/test/action_144/clip_1.mp4"},
+      {"camera_id": "view_3", "display_name": "近景回放", "role": "replay", "path": "datasets/SN-MVFouls-2024/test/action_144/clip_2.mp4"}
+    ],
+    "evidence_notes": ["官方真值：Tackling", "官方真值：Offence + Red card", "低清 · 3 个视角"]
+  }
+]
