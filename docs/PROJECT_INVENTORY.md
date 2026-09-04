@@ -25,7 +25,7 @@
 | `main` `0a7443b` | 完成基线与实时基础管线 | 产品主线 |
 | `feature/live-foul-progress` `2515dac` | 几何犯规候选、异步 MVFoul worker、实时犯规 UI | 实时犯规进展 |
 | `research/pitch-field` `396ae65` | broadcast camera、field registration、离线评估、训练和专项测试 | pitch/field 研究 |
-| `demo/web-showcase` `8ed8d12` | 独立 Demo 入口、展示数据和页面 | Demo 展示 |
+| `demo/web-showcase` `8ed8d12` | 独立 Demo 入口、展示数据和页面 | 已删除分支/范围 |
 | `origin/weekly-report` `c4a3f36` | 周报、会话归档和周报工具 | 已删除分支/范围 |
 | `dev-3d-cad` `13e06ca` | CAD/3D 源文件、导出模型和设计研究 | 已删除分支/范围 |
 
@@ -36,14 +36,15 @@
 - `app/classification/team.py` 和 `app/classification/online.py` 是旧 `TeamClassifier` 兼容层；生产基线是 `team_calibration`，本轮不删除旧接口。
 - `app/foul_detection/detector.py` 是旧 `fouls_far` 适配器；`app/multiview/` 是多视角复核；`feature/live-foul-progress` 是实时犯规候选与异步 worker，三者不应混称为同一条链路。
 - 当前 `app/geometry/`/`VisionCore` 面向固定广角；`research/pitch-field` 的 `app/field_registration/` 是另一套研究架构，不直接并入主线。
-- `app.server.main` 是产品入口；`app/modes/` 的 radar/PySide6/QML 属于 legacy；`demo/web-showcase` 的根目录 `main.py` 不属于产品主线。
+- `app.server.main` 是产品入口；`app/modes/` 的 radar/PySide6/QML 属于 legacy；Demo 独立入口不属于产品主线，`demo/web-showcase` 已删除。
 - `debug/`、`docs/remote_*`、`docs/test1_*` 和 benchmark JSON 是历史验证证据，不代表当前实时状态。
 
 ## 已确认删除清单
 
 - CAD/3D：`cad/parts/`、`designs/3d/`、`docs/main_camera_dimension_study.md` 及 `dev-3d-cad` 分支。
 - 周报：`docs/weekly_reports/`、`tools/generate_weekly_report.py`、`tools/codex_conversations/`（仅周报分支中的内容）及 `origin/weekly-report` 分支。
-- 分支整理：删除 `agents/greeting-in-chinese`；将三个保留分支统一为 `feature/live-foul-progress`、`research/pitch-field`、`demo/web-showcase`。
+- Demo：`demo/web-showcase`（`8ed8d12`）及其原远端分支 `origin/feature/demo-web-showcase`，未并入主线。
+- 分支整理：删除 `agents/greeting-in-chinese`；保留分支统一为 `feature/live-foul-progress`、`research/pitch-field`。
 - `.workbuddy/` 和已创建的 `AGENT.md` 不属于删除范围；`cad/AGENT.md` 仅保留为历史边界说明。
 
 ## 当前验证边界
