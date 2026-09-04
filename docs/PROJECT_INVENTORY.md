@@ -31,6 +31,8 @@
 
 已删除临时分支：`agents/greeting-in-chinese`（`0a7443b`，与 `main` 同点）。
 
+远端兼容引用暂保留：`origin/dev` 指向 `feature/live-foul-progress` 的同一提交，`origin/codex/dev-pitch-projection` 指向 `research/pitch-field` 的同一提交；它们不是独立开发进展，待明确授权后再删除旧引用。
+
 ## 易混淆与累赘内容
 
 - `app/classification/team.py` 和 `app/classification/online.py` 是旧 `TeamClassifier` 兼容层；生产基线是 `team_calibration`，本轮不删除旧接口。
