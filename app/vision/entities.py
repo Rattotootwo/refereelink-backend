@@ -87,7 +87,6 @@ class TrackEntityManager:
         if not tracker_ids:
             return self._advance_missing(frame_index)
 
-        observed_ids = set(tracker_ids)
         entity_ids: dict[int, int] = {}
         statuses: dict[int, str] = {}
         rebindings: dict[int, int] = {}

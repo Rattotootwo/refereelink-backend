@@ -1,12 +1,9 @@
 from __future__ import annotations
 
-import os
-import threading
 import time
 
 import cv2
 import numpy as np
-import pytest
 
 
 def _create_synthetic_video(path: str, num_frames: int = 20,
@@ -23,7 +20,6 @@ def _create_synthetic_video(path: str, num_frames: int = 20,
 
 def test_pipeline_processes_synthetic_video(tmp_path):
     from app.pipeline.source import LocalFileSource
-    from app.pipeline.engine import InferencePipeline
     from app.state.store import StateStore
     from app.state.models import SourceStatus
 
@@ -53,9 +49,8 @@ def test_pipeline_processes_synthetic_video(tmp_path):
 
 
 def test_state_store_pipeline_integration(tmp_path):
-    from app.pipeline.source import LocalFileSource
     from app.state.store import StateStore
-    from app.state.models import FrameState, SourceStatus, PlayerState, PlayerRole
+    from app.state.models import FrameState, PlayerState, PlayerRole
     from app.state.events import EventBus
 
     store = StateStore()

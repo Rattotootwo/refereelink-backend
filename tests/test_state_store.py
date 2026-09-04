@@ -7,7 +7,6 @@ from app.state.models import (
     GameEvent,
     FrameState,
     MetricsSnapshot,
-    PipelineConfig,
     SourceStatus,
 )
 from app.state.store import StateStore
@@ -116,7 +115,7 @@ def test_event_bus_unsubscribe():
 
 def test_event_bus_subscriber_exception_isolated():
     bus = EventBus()
-    a, b = [], []
+    b = []
 
     def bad_cb(**kw):
         raise RuntimeError("boom")

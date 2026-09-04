@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import os
 import tempfile
-import threading
-import time
 
 import cv2
 import numpy as np
@@ -11,7 +9,6 @@ import pytest
 
 from app.pipeline.source import (
     RTSPSource,
-    VideoSource,
     LocalFileSource,
     create_video_source,
 )

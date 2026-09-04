@@ -4,7 +4,6 @@ import threading
 import time
 
 import numpy as np
-import pytest
 
 from app.pipeline.buffer import BoundedFrameBuffer, PipelineMode
 

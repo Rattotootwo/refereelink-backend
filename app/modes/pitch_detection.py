@@ -8,7 +8,7 @@ from app.constants.paths import (
     PITCH_DETECTION_MODEL_PATH,
 )
 from app.geometry.pitch_projection import PitchProjectionEngine
-from app.runtime import CONFIG, annotate_pitch_observations
+from app.runtime import annotate_pitch_observations
 from app.vision.core import VisionCore
 
 

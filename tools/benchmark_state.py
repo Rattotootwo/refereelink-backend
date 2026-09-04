@@ -11,19 +11,15 @@ Run with:
 """
 
 import json
-import statistics
 import threading
 import time
-from typing import List
 
 import numpy as np
 
 from app.state.models import (
     FrameState,
-    MetricsSnapshot,
     PlayerRole,
     PlayerState,
-    SourceStatus,
 )
 from app.state.store import StateStore
 
@@ -52,7 +48,7 @@ def make_frame_state(seq: int) -> FrameState:
 def benchmark_construct(n: int = 1000) -> float:
     start = time.perf_counter()
     for i in range(n):
-        fs = make_frame_state(i)
+        make_frame_state(i)
     elapsed = time.perf_counter() - start
     return elapsed / n * 1000  # ms per construct
 
