@@ -10,9 +10,9 @@
     "risk_level": "high",
     "zone": "前场右侧",
     "videos": [
-      {"camera_id": "cam_main", "display_name": "主机位", "role": "main", "preview_path": "web/public/multiview/cam_main.jpg", "sync_offset_ms": 0},
-      {"camera_id": "cam_side1", "display_name": "侧边机位", "role": "side", "preview_path": "web/public/multiview/cam_side1.jpg", "sync_offset_ms": 30},
-      {"camera_id": "cam_side2", "display_name": "反向机位", "role": "side", "preview_path": "web/public/multiview/cam_side2.jpg", "sync_offset_ms": -20}
+      {"camera_id": "cam_main", "display_name": "主机位", "role": "main", "sync_offset_ms": 0},
+      {"camera_id": "cam_side1", "display_name": "侧边机位", "role": "side", "sync_offset_ms": 30},
+      {"camera_id": "cam_side2", "display_name": "反向机位", "role": "side", "sync_offset_ms": -20}
     ],
     "scripted_result": {
       "decision": "yellow_card",
@@ -41,9 +41,9 @@
     "risk_level": "high",
     "zone": "中场右侧",
     "videos": [
-      {"camera_id": "cam_main", "display_name": "主机位", "role": "main", "preview_path": "web/public/multiview/cam_main.jpg"},
-      {"camera_id": "cam_side1", "display_name": "侧边机位", "role": "replay", "preview_path": "web/public/multiview/cam_side1.jpg", "sync_offset_ms": 40},
-      {"camera_id": "cam_side2", "display_name": "反向机位", "role": "replay", "preview_path": "web/public/multiview/cam_side2.jpg", "sync_offset_ms": -10}
+      {"camera_id": "cam_main", "display_name": "主机位", "role": "main"},
+      {"camera_id": "cam_side1", "display_name": "侧边机位", "role": "replay", "sync_offset_ms": 40},
+      {"camera_id": "cam_side2", "display_name": "反向机位", "role": "replay", "sync_offset_ms": -10}
     ],
     "scripted_result": {"decision": "red_card", "decision_zh": "建议红牌", "action": "Challenge", "severity": "Offence + Red Card", "confidence": 0.91, "card": "red", "localization": {}, "view_attention": [0.44, 0.36, 0.2]},
     "evidence_notes": ["动作速度快", "反向机位存在短时遮挡"]
@@ -59,9 +59,9 @@
     "risk_level": "low",
     "zone": "中场",
     "videos": [
-      {"camera_id": "cam_main", "display_name": "主机位", "role": "main", "preview_path": "web/public/multiview/cam_main.jpg"},
-      {"camera_id": "cam_side1", "display_name": "侧边机位", "role": "side", "preview_path": "web/public/multiview/cam_side1.jpg"},
-      {"camera_id": "cam_side2", "display_name": "反向机位", "role": "side", "preview_path": "web/public/multiview/cam_side2.jpg"}
+      {"camera_id": "cam_main", "display_name": "主机位", "role": "main"},
+      {"camera_id": "cam_side1", "display_name": "侧边机位", "role": "side"},
+      {"camera_id": "cam_side2", "display_name": "反向机位", "role": "side"}
     ],
     "scripted_result": {"decision": "no_offence", "decision_zh": "未检测到犯规", "action": "Challenge", "severity": "No Offence", "confidence": 0.79, "card": "none", "localization": {}, "view_attention": [0.48, 0.31, 0.21]},
     "evidence_notes": ["双方对球均有合理争抢机会", "未发现危险动作"]

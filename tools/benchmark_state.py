@@ -138,7 +138,7 @@ def benchmark_buffer_offline(n: int = 200) -> dict:
 
 def main() -> None:
     print("=" * 64)
-    print(" Soccer Analysis - Architecture Micro-Benchmark")
+    print(" RefereeLink Backend - Architecture Micro-Benchmark")
     print("=" * 64)
     print()
 

@@ -108,6 +108,8 @@ celerybeat.pid
 
 # Environments
 .env
+.env.*
+!.env.example
 .venv
 env/
 venv/
@@ -156,16 +158,42 @@ Desktop.ini
 
 # Downloads
 *.mp4
+*.avi
+*.mov
+*.mkv
 *.pt
+*.pth
+*.engine
+*.weights
 *.pth.tar
 *.onnx
 *.pkl
 *.pdf
+*.tsbuildinfo
 
 # Frontend
 web/node_modules
 web/dist/
 web/.vite/
+
+# Runtime and generated artifacts
+logs/
+tmp/
+temp/
+cache/
+outputs/
+runs/
+wandb/
+checkpoints/
+datasets/
+/data/
+recordings/
+screenshots/
+debug/
+/docs/phase*_benchmark.json
+/docs/remote_*.json
+/docs/test1_diagnostic.json
+/docs/tracking_stability_*
 
 # Venv
 .venv/

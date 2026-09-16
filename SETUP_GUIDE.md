@@ -71,7 +71,7 @@ python tools/calibrate_camera.py \
 ## 5. 启动后端 (终端 1)
 
 ```bash
-cd <repo-root>
+cd "$(git rev-parse --show-toplevel)"
 source .venv/bin/activate
 
 # 方式 A: 空载启动 (推荐，从前端配置视频源)
@@ -89,7 +89,7 @@ uv run python -m app.server.main --video_source assets/data/2e57b9_0.mp4 --devic
 ## 6. 启动前端 (终端 2)
 
 ```bash
-cd <repo-root>/web
+cd "$(git rev-parse --show-toplevel)/web"
 export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 npm run dev
 ```

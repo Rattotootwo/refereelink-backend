@@ -10,7 +10,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 echo "========================================"
-echo " Soccer Analysis — Quick Verify Script"
+echo " RefereeLink Backend — Quick Verify Script"
 echo "========================================"
 echo ""
 

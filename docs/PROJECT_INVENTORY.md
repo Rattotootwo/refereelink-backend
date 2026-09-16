@@ -1,6 +1,6 @@
-# SC 当前项目清单
+# RefereeLink Backend 当前项目清单
 
-更新时间：2026-09-04
+更新时间：2026-09-16
 
 本文是当前代码与分支的整理清单，不是长期路线图。分支原始提交保持独立，产品完成度只按当前 `main` 的代码、测试和现有文档判断。
 
@@ -22,16 +22,15 @@
 
 | 分支 | 当前内容 | 归类 |
 |---|---|---|
-| `main` `0a7443b` | 完成基线与实时基础管线 | 产品主线 |
-| `feature/live-foul-progress` `2515dac` | 几何犯规候选、异步 MVFoul worker、实时犯规 UI | 实时犯规进展 |
-| `research/pitch-field` `396ae65` | broadcast camera、field registration、离线评估、训练和专项测试 | pitch/field 研究 |
-| `demo/web-showcase` `8ed8d12` | 独立 Demo 入口、展示数据和页面 | 已删除分支/范围 |
-| `origin/weekly-report` `c4a3f36` | 周报、会话归档和周报工具 | 已删除分支/范围 |
-| `dev-3d-cad` `13e06ca` | CAD/3D 源文件、导出模型和设计研究 | 已删除分支/范围 |
+| `main` | 完成基线与实时基础管线 | 产品主线 |
+| `feature/live-foul-progress` | 几何犯规候选、异步 MVFoul worker、实时犯规 UI | 实时犯规进展 |
+| `research/pitch-field` | broadcast camera、field registration、离线评估、训练和专项测试 | pitch/field 研究 |
 
-已删除临时分支：`agents/greeting-in-chinese`（`0a7443b`，与 `main` 同点）。
+历史清理后，上述本地分支的提交哈希已全部变化；旧哈希不再作为引用依据。
 
-远端兼容引用暂保留：`origin/dev` 指向 `feature/live-foul-progress` 的同一提交，`origin/codex/dev-pitch-projection` 指向 `research/pitch-field` 的同一提交；它们不是独立开发进展，待明确授权后再删除旧引用。
+已删除临时分支：`agents/greeting-in-chinese`（历史引用已失效）。
+
+当前工作只重写了本地历史，未向 `origin` 推送；远端迁移、改名和旧远端引用清理仍需单独确认。
 
 ## 易混淆与累赘内容
 
@@ -45,7 +44,7 @@
 
 - CAD/3D：`cad/parts/`、`designs/3d/`、`docs/main_camera_dimension_study.md` 及 `dev-3d-cad` 分支。
 - 周报：`docs/weekly_reports/`、`tools/generate_weekly_report.py`、`tools/codex_conversations/`（仅周报分支中的内容）及 `origin/weekly-report` 分支。
-- Demo：`demo/web-showcase`（`8ed8d12`）及其原远端分支 `origin/feature/demo-web-showcase`，未并入主线。
+- Demo：`demo/web-showcase` 及其原远端分支，未并入主线。
 - 分支整理：删除 `agents/greeting-in-chinese`；保留分支统一为 `feature/live-foul-progress`、`research/pitch-field`。
 - `.workbuddy/` 和已创建的 `AGENT.md` 不属于删除范围；`cad/AGENT.md` 仅保留为历史边界说明。
 

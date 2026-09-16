@@ -1,4 +1,4 @@
-# Soccer Analysis Web Dashboard
+# RefereeLink Backend Web Dashboard
 
 Real-time computer-vision dashboard for football (soccer) matches. The
 first-stage Python pipeline rectifies wide-angle frames, runs official

@@ -1,4 +1,4 @@
-# Soccer Analysis 项目协作说明
+# RefereeLink Backend 项目协作说明
 
 ## 适用范围
 

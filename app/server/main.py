@@ -207,7 +207,7 @@ async def lifespan(app: FastAPI):
     stop_and_clear_pipeline()
 
 
-app = FastAPI(title="Soccer Analysis Server", lifespan=lifespan)
+app = FastAPI(title="RefereeLink Backend Server", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -245,7 +245,7 @@ async def video_stream() -> StreamingResponse:
 def main() -> None:
     global _device
 
-    parser = argparse.ArgumentParser(description="Soccer Analysis Server")
+    parser = argparse.ArgumentParser(description="RefereeLink Backend Server")
     parser.add_argument("--video_source", type=str, default=None,
                         help="Video file path or RTSP URL. If omitted, the "
                              "server starts idle and waits for a source "

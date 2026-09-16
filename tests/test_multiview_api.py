@@ -44,7 +44,7 @@ def demo_client(tmp_path):
             app.state.multiview_service = previous
 
 
-def test_multiview_cases_hide_local_paths_and_expose_media(demo_client) -> None:
+def test_multiview_cases_hide_local_paths_when_media_is_absent(demo_client) -> None:
     client = demo_client
     response = client.get("/api/multiview/cases")
     assert response.status_code == 200
@@ -55,12 +55,7 @@ def test_multiview_cases_hide_local_paths_and_expose_media(demo_client) -> None:
     assert first["videos"]
     assert "path" not in first["videos"][0]
     assert "preview_path" not in first["videos"][0]
-    assert first["videos"][0]["media_url"].startswith("/api/multiview/")
-
-    media = client.get(first["videos"][0]["media_url"])
-    assert media.status_code == 200
-    assert media.headers["content-type"].startswith("image/jpeg")
-    assert media.headers["accept-ranges"] == "bytes"
+    assert first["videos"][0]["media_url"] is None
 
 
 def test_multiview_scripted_fallback_is_explicit(demo_client) -> None:
