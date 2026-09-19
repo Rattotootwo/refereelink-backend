@@ -18,21 +18,25 @@ jobs:
           script: |
             const title = context.payload.pull_request.title || '';
             const body = context.payload.pull_request.body || '';
+            const authorLogin = context.payload.pull_request.user?.login || '';
+            const isDependabot = /dependabot/i.test(authorLogin);
             const conventionalCommit = /^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([^\)]+\))?!?: .+/;
             const linkedIssue = /\b(close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+#\d+\b/i;
             const errors = [];
 
-            if (!conventionalCommit.test(title)) {
-              errors.push('PR title must use Conventional Commits, for example `feat(api): add state endpoint`.');
-            }
-            if (!body.trim()) {
-              errors.push('PR body must not be empty.');
-            }
-            if (!linkedIssue.test(body)) {
-              errors.push('PR body must link a GitHub issue with `Closes #123`, `Fixes #123`, or `Resolves #123`.');
-            }
-            if (!/^##\s+Validation\b/im.test(body)) {
-              errors.push('PR body must include a `## Validation` section.');
+            if (!isDependabot) {
+              if (!conventionalCommit.test(title)) {
+                errors.push('PR title must use Conventional Commits, for example `feat(api): add state endpoint`.');
+              }
+              if (!body.trim()) {
+                errors.push('PR body must not be empty.');
+              }
+              if (!linkedIssue.test(body)) {
+                errors.push('PR body must link a GitHub issue with `Closes #123`, `Fixes #123`, or `Resolves #123`.');
+              }
+              if (!/^##\s+Validation\b/im.test(body)) {
+                errors.push('PR body must include a `## Validation` section.');
+              }
             }
 
             const files = await github.paginate(github.rest.pulls.listFiles, {
@@ -56,12 +60,13 @@ jobs:
             }
 
             const changedLines = files.reduce((sum, file) => sum + file.additions + file.deletions, 0);
-            if (changedLines > 800) {
+            if (!isDependabot && changedLines > 800) {
               errors.push(`PR is ${changedLines} changed lines; split it into reviewable pieces (limit: 800).`);
             }
 
             if (errors.length) {
               core.setFailed(errors.join('\n'));
             } else {
-              core.info(`PR policy passed for ${files.length} files and ${changedLines} changed lines.`);
+              const policyScope = isDependabot ? 'Dependabot safety checks' : 'full human PR policy';
+              core.info(`PR policy passed (${policyScope}) for ${files.length} files and ${changedLines} changed lines.`);
             }
