@@ -4,6 +4,7 @@ import argparse
 import logging
 import threading
 import time
+from collections.abc import Iterator
 from contextlib import asynccontextmanager
 from typing import Optional
 
@@ -16,6 +17,8 @@ from fastapi.responses import StreamingResponse
 from app.pipeline.buffer import PipelineMode
 from app.pipeline.engine import InferencePipeline
 from app.pipeline.source import create_video_source
+from app.field_ingest.api import create_router as create_field_ingest_router
+from app.field_ingest.service import FieldIngestService
 from app.constants.paths import (
     BALL_DETECTION_MODEL_PATH,
     CAMERA_CALIBRATION_PATH,
@@ -55,17 +58,29 @@ def _put_placeholder(text: str) -> None:
     MJPEG endpoint always has something to serve."""
     frame = np.zeros((480, 640, 3), dtype=np.uint8)
     cv2.putText(
-        frame, text, (40, 240),
-        cv2.FONT_HERSHEY_SIMPLEX, 1.0, (180, 180, 180), 2, cv2.LINE_AA,
+        frame,
+        text,
+        (40, 240),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        1.0,
+        (180, 180, 180),
+        2,
+        cv2.LINE_AA,
     )
     cv2.putText(
-        frame, "Configure a video source and press START", (40, 280),
-        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (120, 120, 120), 1, cv2.LINE_AA,
+        frame,
+        "Configure a video source and press START",
+        (40, 280),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        0.6,
+        (120, 120, 120),
+        1,
+        cv2.LINE_AA,
     )
     _store.publish_raw_frame(frame)
 
 
-def _generate_mjpeg() -> iter:
+def _generate_mjpeg() -> Iterator[bytes]:
     while True:
         jpeg = _store.latest_jpeg_frame
         if jpeg is None:
@@ -74,12 +89,7 @@ def _generate_mjpeg() -> iter:
         if jpeg is None:
             time.sleep(0.05)
             continue
-        yield (
-            b"--frame\r\n"
-            b"Content-Type: image/jpeg\r\n\r\n"
-            + jpeg
-            + b"\r\n"
-        )
+        yield (b"--frame\r\nContent-Type: image/jpeg\r\n\r\n" + jpeg + b"\r\n")
         time.sleep(1.0 / 30.0)
 
 
@@ -224,6 +234,7 @@ app.state.multiview_service = MultiviewAnalysisService()
 app.state.create_pipeline = create_pipeline
 app.state.attach_and_start_pipeline = attach_and_start_pipeline
 app.state.stop_and_clear_pipeline = stop_and_clear_pipeline
+app.state.field_ingest = FieldIngestService()
 
 app.include_router(health_router)
 app.include_router(status_router)
@@ -232,6 +243,7 @@ app.include_router(multiview_router)
 app.include_router(pipeline_router)
 app.include_router(team_calibration_router)
 app.include_router(ws_router)
+app.include_router(create_field_ingest_router(app.state.field_ingest))
 
 
 @app.get("/video/stream")
@@ -246,12 +258,17 @@ def main() -> None:
     global _device
 
     parser = argparse.ArgumentParser(description="RefereeLink Backend Server")
-    parser.add_argument("--video_source", type=str, default=None,
-                        help="Video file path or RTSP URL. If omitted, the "
-                             "server starts idle and waits for a source "
-                             "from the web UI.")
-    parser.add_argument("--device", type=str, default="cpu",
-                        help="Device for inference (cpu, cuda)")
+    parser.add_argument(
+        "--video_source",
+        type=str,
+        default=None,
+        help="Video file path or RTSP URL. If omitted, the "
+        "server starts idle and waits for a source "
+        "from the web UI.",
+    )
+    parser.add_argument(
+        "--device", type=str, default="cpu", help="Device for inference (cpu, cuda)"
+    )
     parser.add_argument(
         "--inference_backend",
         type=str,
@@ -294,39 +311,41 @@ def main() -> None:
     args = parser.parse_args()
 
     _device = args.device
-    _store.update_config({
-        "video_source": args.video_source or "",
-        "device": args.device,
-        "inference_backend": args.inference_backend,
-        "enable_foul_detection": args.enable_foul_detection,
-        "foul_confidence_threshold": args.foul_confidence_threshold,
-        "player_model_path": args.player_model_path,
-        "pitch_model_path": args.pitch_model_path,
-        "camera_calibration_path": args.camera_calibration_path,
-        "enable_undistortion": args.enable_undistortion,
-        "calibration_alpha": args.calibration_alpha,
-        "pitch_detection_interval": args.pitch_detection_interval,
-        "imgsz": args.imgsz,
-        "player_confidence": args.player_confidence,
-        "player_iou": args.player_iou,
-        "max_prediction_gap_frames": args.max_prediction_gap_frames,
-        "track_reactivation_window_frames": args.track_reactivation_window_frames,
-        "ball_model_path": args.ball_model_path,
-        "enable_ball": args.enable_ball,
-        "ball_detection_interval": args.ball_detection_interval,
-        "ball_max_prediction_frames": args.ball_max_prediction_frames,
-        "role_model_path": args.role_model_path,
-        "team_classifier_path": args.team_classifier_path,
-        "team_calibration_path": args.team_calibration_path,
-        "role_detection_interval": args.role_detection_interval,
-        "team_classification_interval": args.team_classification_interval,
-        "track_activation_threshold": args.track_activation_threshold,
-        "track_lost_buffer": args.track_lost_buffer,
-        "track_matching_threshold": args.track_matching_threshold,
-        "track_minimum_consecutive_frames": args.track_minimum_consecutive_frames,
-        "enable_recording": args.enable_recording,
-        "target_video_path": args.target_video_path,
-    })
+    _store.update_config(
+        {
+            "video_source": args.video_source or "",
+            "device": args.device,
+            "inference_backend": args.inference_backend,
+            "enable_foul_detection": args.enable_foul_detection,
+            "foul_confidence_threshold": args.foul_confidence_threshold,
+            "player_model_path": args.player_model_path,
+            "pitch_model_path": args.pitch_model_path,
+            "camera_calibration_path": args.camera_calibration_path,
+            "enable_undistortion": args.enable_undistortion,
+            "calibration_alpha": args.calibration_alpha,
+            "pitch_detection_interval": args.pitch_detection_interval,
+            "imgsz": args.imgsz,
+            "player_confidence": args.player_confidence,
+            "player_iou": args.player_iou,
+            "max_prediction_gap_frames": args.max_prediction_gap_frames,
+            "track_reactivation_window_frames": args.track_reactivation_window_frames,
+            "ball_model_path": args.ball_model_path,
+            "enable_ball": args.enable_ball,
+            "ball_detection_interval": args.ball_detection_interval,
+            "ball_max_prediction_frames": args.ball_max_prediction_frames,
+            "role_model_path": args.role_model_path,
+            "team_classifier_path": args.team_classifier_path,
+            "team_calibration_path": args.team_calibration_path,
+            "role_detection_interval": args.role_detection_interval,
+            "team_classification_interval": args.team_classification_interval,
+            "track_activation_threshold": args.track_activation_threshold,
+            "track_lost_buffer": args.track_lost_buffer,
+            "track_matching_threshold": args.track_matching_threshold,
+            "track_minimum_consecutive_frames": args.track_minimum_consecutive_frames,
+            "enable_recording": args.enable_recording,
+            "target_video_path": args.target_video_path,
+        }
+    )
 
     if args.video_source:
         pipeline = create_pipeline(
@@ -365,10 +384,13 @@ def main() -> None:
         )
         attach_and_start_pipeline(pipeline)
     else:
-        logger.info("No --video_source provided; server starting idle. "
-                    "Configure a source from the web dashboard.")
+        logger.info(
+            "No --video_source provided; server starting idle. "
+            "Configure a source from the web dashboard."
+        )
 
     import uvicorn
+
     uvicorn.run(app, host=args.host, port=args.port, log_level="info")
 
 
