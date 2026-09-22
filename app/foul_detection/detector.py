@@ -89,7 +89,7 @@ class FoulDetector:
     # Public API
     # ------------------------------------------------------------------
 
-    def update(self, frame: np.ndarray, frame_index: int = 0) -> Optional[FoulPrediction]:
+    def update(self, frame: np.ndarray, frame_index: int) -> Optional[FoulPrediction]:
         """
         Append *frame* to the rolling buffer and potentially run inference.
 

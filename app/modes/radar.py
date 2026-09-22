@@ -48,7 +48,7 @@ def emit_radar_log(log_callback: RadarLogCallback, message: str) -> None:
 
 
 def format_radar_frame_summary(update: RadarFrameData) -> str:
-    radar_status = update.homography_status if update.radar_available else 'fallback'
+    radar_status = update.homography_status if update.radar_available else "fallback"
     return (
         f"frame={update.frame_index} total={update.detections_total} "
         f"players={update.player_count} goalkeepers={update.goalkeeper_count} "
@@ -73,10 +73,10 @@ def compute_motion_centroid(mask: np.ndarray) -> Optional[np.ndarray]:
     if mask.ndim != 2:
         return None
     m = cv2.moments(mask_f)
-    if m['m00'] <= 0:
+    if m["m00"] <= 0:
         return None
-    cx = m['m10'] / m['m00']
-    cy = m['m01'] / m['m00']
+    cx = m["m10"] / m["m00"]
+    cy = m["m01"] / m["m00"]
     return np.array([cx, cy], dtype=np.float64)
 
 
@@ -164,7 +164,7 @@ def iter_radar_analysis(
     imgsz: int = 640,
 ) -> Iterator[RadarFrameData]:
     video_info = sv.VideoInfo.from_video_path(source_video_path)
-    emit_radar_log(log_callback, 'loading shared vision core')
+    emit_radar_log(log_callback, "loading shared vision core")
     vision_core = VisionCore(
         device=device,
         fps=video_info.fps,
@@ -177,14 +177,15 @@ def iter_radar_analysis(
         imgsz=imgsz,
     )
     vision_core.load_models()
-    emit_radar_log(log_callback, 'shared vision core ready')
+    emit_radar_log(log_callback, "shared vision core ready")
 
     foul_detector = None
     if foul_checkpoint_path is not None:
         from app.foul_detection.detector import FoulDetector
-        emit_radar_log(log_callback, 'loading foul detection model')
+
+        emit_radar_log(log_callback, "loading foul detection model")
         foul_detector = FoulDetector(checkpoint_path=foul_checkpoint_path, device=device)
-        emit_radar_log(log_callback, 'foul detection model ready')
+        emit_radar_log(log_callback, "foul detection model ready")
 
     frame_generator = sv.get_video_frames_generator(source_path=source_video_path)
 
@@ -203,12 +204,15 @@ def iter_radar_analysis(
 
         foul_prediction = None
         if foul_detector is not None:
-            foul_prediction = foul_detector.update(vision_frame.undistorted_frame)
+            foul_prediction = foul_detector.update(
+                vision_frame.undistorted_frame, frame_index=frame_index
+            )
 
         # Compute foul location: derive from motion mask centroid projected through homography.
         foul_location: Optional[np.ndarray] = None
         if foul_prediction is not None:
             from offside.foul_overlay import _hud_show_prediction, motion_foul_region_mask
+
             if _hud_show_prediction(
                 foul_prediction,
                 min_offence_confidence=0.48,
@@ -232,7 +236,7 @@ def iter_radar_analysis(
                                 foul_location = world_point
                                 emit_radar_log(
                                     log_callback,
-                                    f'frame={frame_index} foul_location=({wx:.0f},{wy:.0f})',
+                                    f"frame={frame_index} foul_location=({wx:.0f},{wy:.0f})",
                                 )
 
         tracked_frame = render_tracked_frame(
@@ -249,12 +253,12 @@ def iter_radar_analysis(
             foul_location=foul_location,
         )
         radar_available = projection.available
-        if projection.homography_status == 'unavailable':
-            emit_radar_log(log_callback, f'frame={frame_index} radar projection unavailable')
-        elif projection.homography_status == 'stale':
-            emit_radar_log(log_callback, f'frame={frame_index} reusing stale homography')
-        elif projection.homography_status == 'reused':
-            emit_radar_log(log_callback, f'frame={frame_index} reusing homography')
+        if projection.homography_status == "unavailable":
+            emit_radar_log(log_callback, f"frame={frame_index} radar projection unavailable")
+        elif projection.homography_status == "stale":
+            emit_radar_log(log_callback, f"frame={frame_index} reusing stale homography")
+        elif projection.homography_status == "reused":
+            emit_radar_log(log_callback, f"frame={frame_index} reusing homography")
 
         update = RadarFrameData(
             frame_index=frame_index,
@@ -307,6 +311,7 @@ def run_radar(
         )
         if update.foul_prediction is not None:
             from offside.foul_overlay import _hud_show_prediction, draw_foul_hud
+
             if _hud_show_prediction(
                 update.foul_prediction,
                 min_offence_confidence=0.48,
