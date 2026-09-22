@@ -49,11 +49,13 @@ class FoulDetector:
     def __init__(
         self,
         checkpoint_path: str,
-        device: str = 'cpu',
+        device: str = "cpu",
         window_size: int = DEFAULT_WINDOW_SIZE,
         stride: int = DEFAULT_STRIDE,
         input_fps: float = DEFAULT_INPUT_FPS,
         target_fps: float = DEFAULT_TARGET_FPS,
+        cooldown_frames: int = 25,
+        confidence_threshold: float = 0.5,
     ) -> None:
         """
         Load the MVFoul model and initialise the frame buffer.
@@ -65,6 +67,10 @@ class FoulDetector:
             stride: How many frames to advance before the next inference run.
             input_fps: Frame rate of the source video feed.
             target_fps: Frame rate the MVFoul model expects after resampling.
+            cooldown_frames: Minimum number of frames between two accepted
+                candidates (default 25 ≈ 1 second at 25 fps).
+            confidence_threshold: Minimum confidence for a prediction to be
+                returned as a candidate.
         """
         self._model = load_mvfoul_model(checkpoint_path, device=device)
         self._device = device
@@ -75,21 +81,26 @@ class FoulDetector:
         self._buffer: deque = deque(maxlen=window_size)
         self._frames_since_inference: int = 0
         self._latest_prediction: Optional[FoulPrediction] = None
+        self._cooldown_frames = cooldown_frames
+        self._confidence_threshold = confidence_threshold
+        self._last_candidate_frame = -cooldown_frames
 
     # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
 
-    def update(self, frame: np.ndarray) -> Optional[FoulPrediction]:
+    def update(self, frame: np.ndarray, frame_index: int = 0) -> Optional[FoulPrediction]:
         """
         Append *frame* to the rolling buffer and potentially run inference.
 
         Args:
             frame: BGR ``uint8`` array of shape ``(H, W, 3)``.
+            frame_index: Current frame index, used for cooldown tracking.
 
         Returns:
-            The most-recent :class:`FoulPrediction`, or ``None`` if the buffer
-            has not yet accumulated ``window_size`` frames.
+            The most-recent :class:`FoulPrediction` that passes the confidence
+            and cooldown filters, or ``None`` if no valid prediction is
+            available yet.
         """
         self._buffer.append(frame)
         self._frames_since_inference += 1
@@ -108,6 +119,15 @@ class FoulDetector:
             )
             self._frames_since_inference = 0
 
+        # Apply confidence and cooldown filters
+        if self._latest_prediction is None:
+            return None
+        if getattr(self._latest_prediction, "confidence", 0.0) < self._confidence_threshold:
+            return None
+        if frame_index - self._last_candidate_frame < self._cooldown_frames:
+            return None
+
+        self._last_candidate_frame = frame_index
         return self._latest_prediction
 
     @property

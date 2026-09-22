@@ -62,9 +62,9 @@ def run_foul_detection(
     )
 
     frame_generator = sv.get_video_frames_generator(source_path=source_video_path)
-    for frame in frame_generator:
+    for frame_index, frame in enumerate(frame_generator, start=1):
         undistorted_frame = undistorter.apply(frame)
-        prediction = detector.update(undistorted_frame)
+        prediction = detector.update(undistorted_frame, frame_index=frame_index)
         annotated = undistorted_frame.copy()
         if prediction is not None and _hud_show_prediction(
             prediction,
